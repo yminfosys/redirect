@@ -12,10 +12,16 @@ router.get('/', async (req, res) => {
       ip = '27.255.221.0'; // Example IP from India
     }
 
+    // Clean IPv4-mapped IPv6 (e.g., ::ffff:104.248.161.110)
+    if (ip.includes('::ffff:')) {
+      ip = ip.split('::ffff:')[1];
+    }
+
+
     const response = await axios.get(`https://ipapi.co/${ip}/json/`);
     const country = response.data.country_name;
 
-    console.log(country)
+    console.log(country, ip)
 
     if (country === 'India') {
       return res.redirect('https://paacrypto.com');
